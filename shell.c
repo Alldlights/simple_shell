@@ -9,12 +9,13 @@
  */
 int main(int argc, char **argv)
 {
-	(void)argc;
-	char *lineptr = NULL,  *lineptr_cp = NULL, *token;
 	const char *delim = " \n";
+	char *lineptr = NULL, *lineptr_cp = NULL;
+	char *token;
 	size_t n = 0;
 	ssize_t nchar_read;
-	int num_tokens = 0, i, j;
+	int num_tokens = 0, i;
+	(void)argc;
 
 	while (1)
 	{
