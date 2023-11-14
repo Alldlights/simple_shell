@@ -1,64 +1,53 @@
-#include "main.h"
+#include "shell.h"
 
 /**
- * main - A program that works like a simple bash shell
- * @argc: argument count
- * @argv: argument vector
- *
- * Return: Always 0.
+ * main - Entry point to shell
+ * @argc: Argument count
+ * @argv: Argument vector
+ * Return: 0 on success
  */
 int main(int argc, char **argv)
 {
-	const char *delim = " \n";
-	char *lineptr = NULL, *lineptr_cp = NULL;
-	char *token;
-	size_t n = 0;
+	char *lineptr = NULL, *line_cp = NULL;
+	char **array;
 	ssize_t nchar_read;
-	int num_tokens = 0, i;
-	(void)argc;
+	size_t len = 0;
+	(void)argc, (void)argv;
 
 	while (1)
 	{
-		print_string("$ ");
-		nchar_read = getline(&lineptr, &n, stdin);
+		nchar_read = read_line(&lineptr, &len);
 		if (nchar_read == -1)
 		{
-			perror("Exiting shell");
-			exit(1);
+			write_error("Exiting Shell\n");
+			free(lineptr);
+			exit(EXIT_FAILURE);
 		}
-		lineptr_cp = malloc(sizeof(char) * nchar_read);
-		if (lineptr_cp == NULL)
+
+		line_cp = _strdup(lineptr);
+		array = tok_str(line_cp);
+		if (array == NULL)
 		{
-			perror("hsh: memory allocation error");
+			free(line_cp);
 			return (-1);
 		}
-		_strcpy(lineptr_cp, lineptr);
 
-		token = strtok(lineptr, delim);
-		while (token != NULL)
+		if (is_exit_cmd(array[0]))
 		{
-			num_tokens++;
-			token = strtok(NULL, delim);
+			exe_exit_cmd();
 		}
-		num_tokens++;
-
-		argv = malloc(sizeof(char *) * num_tokens);
-		if (argv == NULL)
+		else if (is_env_cmd(array[0]))
 		{
-			perror("Memory allocation failed");
+			exe_env_cmd();
 		}
-		token = strtok(lineptr_cp, delim);
-		for (i = 0; token != NULL; i++)
+		else
 		{
-			argv[i] = malloc(sizeof(char) * _strlen(token));
-			strcpy(argv[i], token);
-
-			token = strtok(NULL, delim);
+			forkexe(array);
 		}
-		argv[i] = NULL;
+		free(array);
 	}
-	free(argv);
-	free(lineptr_cp);
 	free(lineptr);
 	return (0);
 }
+
+
