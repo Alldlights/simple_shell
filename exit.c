@@ -12,14 +12,24 @@ int is_exit_cmd(const char *cmd)
 
 /**
 * exe_exit_cmd - Execute the exit built-in cmd to exit shell
-* Return: Nothing
+* @args: Array of arguments
+* Return: Exit status
 */
-void exe_exit_cmd(void)
+int exe_exit_cmd(char **args)
 {
-	char *msg = "Exiting the shell...\n";
-
-	write(STDOUT_FILENO, msg, _strlen(msg));
-	exit(EXIT_SUCCESS);
+	char *msg = "Exiting shell...\n";
+	int exit_status;
+	
+	if (args[1] != NULL)
+	{
+		exit_status = _atoi(args[1]);
+		return (exit_status);
+	}
+	else
+	{
+		write(STDOUT_FILENO, msg, _strlen(msg));
+		exit(EXIT_SUCCESS);
+	}
 }
 
 /**

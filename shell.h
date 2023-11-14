@@ -30,9 +30,10 @@ char *_getenv(const char *name);
 int _strncmp(const char *fir_str, const char *sec_str, size_t n);
 void *_memcpy(void *dest, const void *src, size_t n);
 int is_exit_cmd(const char *cmd);
-void exe_exit_cmd(void);
+int exe_exit_cmd(char **args);
 int _strcmp(const char *fir_str, const char *sec_str);
 int is_env_cmd(const char *cmd);
 void exe_env_cmd(void);
+int _atoi(char *str);
 
 #endif /* SHELL_H */

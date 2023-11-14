@@ -12,6 +12,7 @@ int main(int argc, char **argv)
 	char **array;
 	ssize_t nchar_read;
 	size_t len = 0;
+	int exit_status;
 	(void)argc, (void)argv;
 
 	while (1)
@@ -34,7 +35,10 @@ int main(int argc, char **argv)
 
 		if (is_exit_cmd(array[0]))
 		{
-			exe_exit_cmd();
+			exit_status = exe_exit_cmd(array);
+			free(lineptr);
+			free(array);
+			exit(exit_status);
 		}
 		else if (is_env_cmd(array[0]))
 		{
