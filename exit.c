@@ -19,7 +19,7 @@ int exe_exit_cmd(char **args)
 {
 	char *msg = "Exiting shell...\n";
 	int exit_status;
-	
+
 	if (args[1] != NULL)
 	{
 		exit_status = _atoi(args[1]);
@@ -45,15 +45,43 @@ int is_env_cmd(const char *cmd)
 /**
 * exe_env_cmd - Execute the env built-in command
 * which prints the environment variable
+* @args: Array of arguments
 * Return: Nothing
 */
-void exe_env_cmd(void)
+void exe_env_cmd(char **args)
 {
 	char **env;
 
-	for (env = environ; *env != NULL; ++env)
+	if (args[1] == NULL)
 	{
-		write(STDOUT_FILENO, *env, _strlen(*env));
-		write(STDOUT_FILENO, "\n", 1);
+		for (env = environ; *env != NULL; ++env)
+		{
+			write(STDOUT_FILENO, *env, _strlen(*env));
+			write(STDOUT_FILENO, "\n", 1);
+		}
 	}
+	else if (_strcmp(args[1], "setenv") == 0)
+	{
+		if (args[2] != NULL && args[3] != NULL)
+		{
+			if (set_env_var(args[2], args[3]) == 0)
+				prt_str("Environment var set success\n");
+		}
+		else
+			write_error("Usage: env setenv <variable> <value>\n");
+	}
+	else if (_strcmp(args[1], "unsetenv") == 0)
+	{
+		if (args[2] != NULL)
+		{
+			if (unset_env_var(args[2]) == 0)
+				prt_str("Environment var unset success\n");
+			else
+				write_error("Failed to unset env variable\n");
+		}
+		else
+			write_error("Usage: env unsetenv <variable>\n");
+	}
+	else
+		forkexe(args);
 }

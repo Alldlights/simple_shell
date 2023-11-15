@@ -41,13 +41,9 @@ int main(int argc, char **argv)
 			exit(exit_status);
 		}
 		else if (is_env_cmd(array[0]))
-		{
-			exe_env_cmd();
-		}
+			exe_env_cmd(array);
 		else
-		{
 			forkexe(array);
-		}
 		free(array);
 	}
 	free(lineptr);

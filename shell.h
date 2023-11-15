@@ -33,7 +33,10 @@ int is_exit_cmd(const char *cmd);
 int exe_exit_cmd(char **args);
 int _strcmp(const char *fir_str, const char *sec_str);
 int is_env_cmd(const char *cmd);
-void exe_env_cmd(void);
+void exe_env_cmd(char **args);
 int _atoi(char *str);
+int unset_env_var(const char *variable);
+int set_env_var(const char *variable, const char *value);
+void prt_str(char *msg);
 
 #endif /* SHELL_H */
