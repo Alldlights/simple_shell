@@ -25,7 +25,7 @@ void run_int_mode(void)
 
 	while (1)
 	{
-		prt_str("($) ");
+		print_prompt();
 		nchar_read = read_line(&lineptr, &len);
 		if (nchar_read == -1)
 		{

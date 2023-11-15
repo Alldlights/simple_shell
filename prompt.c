@@ -6,7 +6,7 @@
 */
 void print_prompt(void)
 {
-	write(STDOUT_FILENO, "$ ", 2);
+	write(STDOUT_FILENO, "($) ", 4);
 	fflush(stdout);
 }
 

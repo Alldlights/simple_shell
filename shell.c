@@ -6,13 +6,14 @@
  */
 int main(void)
 {
-	if (isatty(STDIN_FILENO))
+	exe_shell();
+	/**if (isatty(STDIN_FILENO))
 	{
 		run_int_mode();
 	}
 	else
 	{
 		run_non_int();
-	}
+	}**/
 	return (0);
 }

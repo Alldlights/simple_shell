@@ -40,5 +40,8 @@ int set_env_var(const char *variable, const char *value);
 void prt_str(char *msg);
 void run_non_int(void);
 void run_int_mode(void);
+void exe_shell(void);
+void free_array(char **array);
+void execute_command(char **command);
 
 #endif /* SHELL_H */
