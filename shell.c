@@ -24,30 +24,28 @@ int main(int argc, char **argv)
 			free(lineptr);
 			exit(EXIT_FAILURE);
 		}
-
 		line_cp = _strdup(lineptr);
 		array = tok_str(line_cp);
-		if (array == NULL)
+		if (!array)
 		{
 			free(line_cp);
 			return (-1);
 		}
-
-		if (is_exit_cmd(array[0]))
+		if (isatty(STDOUT_FILENO) && is_exit_cmd(array[0]))
 		{
 			exit_status = exe_exit_cmd(array);
 			free(lineptr);
 			free(array);
 			exit(exit_status);
 		}
-		else if (is_env_cmd(array[0]))
+		else if (isatty(STDOUT_FILENO) && is_env_cmd(array[0]))
 			exe_env_cmd(array);
-		else
+		else if (isatty(STDOUT_FILENO))
 			forkexe(array);
+		else
+			write_error("Output is not a terminal\n");
 		free(array);
 	}
 	free(lineptr);
 	return (0);
 }
-
-
