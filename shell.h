@@ -38,5 +38,7 @@ int _atoi(char *str);
 int unset_env_var(const char *variable);
 int set_env_var(const char *variable, const char *value);
 void prt_str(char *msg);
+void run_non_int(void);
+void run_int_mode(void);
 
 #endif /* SHELL_H */
