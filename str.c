@@ -52,7 +52,7 @@ int _strcmp(char *str, char *str1)
 	int cmp = 0, i;
 
 	if (str == NULL || str1 == NULL)
-		return (1);
+		return (-1);
 	for (i = 0; str[i]; i++)
 	{
 		if (str[i] != str1[i])
