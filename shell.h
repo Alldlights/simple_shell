@@ -3,45 +3,104 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
-#include <stddef.h>
-#include <sys/wait.h>
+#include <unistd.h>
+#include <sys/stat.h>
 #include <sys/types.h>
-
-#define PATH_MAX_LENGHT 4096
-#define BUFFER_SIZE 1024
+#include <sys/wait.h>
+#include <signal.h>
+#include <fcntl.h>
+#include <errno.h>
 
 extern char **environ;
 
-void print_prompt(void);
-void execmd(char **cmd);
-size_t _strlen(const char *s);
-ssize_t read_line(char **lineptr, size_t *len);
-char **tok_str(char *line);
-void forkexe(char **cmd);
-char *_strcpy(char *dest, const char *src);
-char *get_path(void);
-void write_error(const char *msg);
-char *con_path(const char *path, const char *cmd);
-char *find_cmd_in_path(const char *cmd);
-char *_strdup(const char *s);
-char *_getenv(const char *name);
-int _strncmp(const char *fir_str, const char *sec_str, size_t n);
-void *_memcpy(void *dest, const void *src, size_t n);
-int is_exit_cmd(const char *cmd);
-int exe_exit_cmd(char **args);
-int _strcmp(const char *fir_str, const char *sec_str);
-int is_env_cmd(const char *cmd);
-void exe_env_cmd(char **args);
-int _atoi(char *str);
-int unset_env_var(const char *variable);
-int set_env_var(const char *variable, const char *value);
-void prt_str(char *msg);
-void run_non_int(void);
-void run_int_mode(void);
-void exe_shell(void);
-void free_array(char **array);
-void execute_command(char **command);
+#define BUFSIZE 256
+#define TOKENSIZE 64
+#define PRINT(c) (write(STDOUT_FILENO, c, _strlen(c)))
+#define PROMPT "($) "
+#define SUCCESS (1)
+#define FAIL (-1)
+#define NEUTRAL (0)
 
+/**
+ * struct hsh_data - Global data structure for the shell
+ * @line: The line input
+ * @args: Arguments passed
+ * @err_msg: The error message
+ * @cmd: The parsed command
+ * @oldpwd: The old path
+ * @index: the index of the command
+ * @env: The environment of the shell
+ *
+ * Description: A structure of all the variables needed to manage the
+ * simple shell program, memory and its accessability
+ */
+typedef struct hsh_data
+{
+	char *line;
+	char **args;
+	char *err_msg;
+	char *cmd;
+	char *oldpwd;
+	char *env;
+	unsigned long int index;
+} hsh_t;
+
+/**
+ * struct builtin - Manage the buitin functions
+ * @cmd: The command
+ * @f: The associated function
+ *
+ * Desccription: This struct handles the builtin functions
+ */
+typedef struct builtin
+{
+	char *cmd;
+	int (*f)(hsh_t *data);
+} bul_t;
+
+ssize_t read_line(hsh_t *);
+int split_line(hsh_t *);
+int parse_line(hsh_t *);
+int process_cmd(hsh_t *);
+
+char *_strdup(char *str);
+char *_strcat(char *first, char *second);
+size_t _strlen(char *str);
+char *_strchr(char *str, char c);
+int _strcmp(char *str, char *str1);
+char *_strcpy(char *dest, char *src);
+
+void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
+char *_memset(char *s, char byte, unsigned int n);
+char *_memcpy(char *dest, char *src, unsigned int i);
+int free_data(hsh_t *);
+
+void *fill_an_array(void *a, int elem, unsigned int len);
+void signal_handler(int signo);
+char *_getenv(char *path_name);
+void index_cmd(hsh_t *data);
+void array_rev(char *arr, int len);
+
+char *_itoa(unsigned int n);
+int intlen(int num);
+int _atoi(char *c);
+int print_error(hsh_t *data, char *name);
+int write_history(hsh_t *data);
+int _isalpha(int c);
+
+int abort_prg(hsh_t *);
+int change_dir(hsh_t *);
+int display_help(hsh_t *);
+int handle_builtin(hsh_t *);
+int check_builtin(hsh_t *);
+
+int is_path_form(hsh_t *);
+void is_short_form(hsh_t *);
+int is_builtin(hsh_t *);
+
+void interactive(hsh_t *, char **av);
+int non_int(hsh_t *, int ac, char **av);
+int parse_args(hsh_t *, int ac, char **av);
 #endif /* SHELL_H */
+

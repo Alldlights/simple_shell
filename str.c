@@ -1,112 +1,105 @@
 #include "shell.h"
 
 /**
-* _strlen - Calculates the lenght of a string
-* @s: Sting to get its lenght
-* Return: Lenght of string in bytes
-*/
-size_t _strlen(const char *s)
+ * _strcat - Concatenates two strings with '/'
+ * @first: First string
+ * @second: second string
+ * Return: On success newly concatenated string
+ */
+char *_strcat(char *first, char *second)
 {
-	size_t i = 0;
+	int len1, len2, i = 0, j = 0;
+	char *result;
 
-	while (*s != '\0')
-	{
-		s++;
-		i++;
-	}
-	return (i);
+	len1 = _strlen(first);
+	len2 = _strlen(second);
+	result = malloc((len1 + len2 + 2) * sizeof(char *));
+	if (!result)
+		return (NULL);
+	*result = '\0';
+	while (first[j])
+		result[i++] = first[j++];
+	result[i++] = '/';
+	j = 0;
+	while (second[j])
+		result[i++] = second[j++];
+	result[i] = '\0';
+	return (result);
 }
 
 /**
- * tok_str - Tokenize a string
- * @line: The string to tokenize
- * Return: Array of token
+ * _strlen - Finds the lenght of a string
+ * @str: The string
+ * Return: The lenght of the string
  */
-char **tok_str(char *line)
+size_t _strlen(char *str)
 {
-	int i = 0;
-	char *token;
-	char **array = malloc(sizeof(char *) * 1024);
+	size_t len;
 
-	if (array == NULL)
+	for (len = 0; str[len]; len++)
+		;
+	return (len);
+}
+
+/**
+ * _strcmp - Compares two strings
+ * @str: First string
+ * @str1: Second string
+ * Return: 0 on success, else a neagtive number
+ */
+int _strcmp(char *str, char *str1)
+{
+	int cmp = 0, i;
+
+	if (str == NULL || str1 == NULL)
+		return (1);
+	for (i = 0; str[i]; i++)
 	{
-		write_error("Memory allocation failed");
+		if (str[i] != str1[i])
+		{
+			cmp = str[i] - str1[i];
+			break;
+		}
+		else
+			continue;
+	}
+	return (cmp);
+}
+
+/**
+ * _strchr - Locates a character in a string
+ * @str: The string
+ * @c: The character to locate
+ * Return: A pointer to the first occurance of the character
+ */
+char *_strchr(char *str, char c)
+{
+	char *ptr;
+
+	if (str == NULL)
 		return (NULL);
-	}
-
-	token = strtok(line, " \n");
-	while (token)
+	for (ptr = str; *ptr; ptr++)
 	{
-		array[i] = token;
-		token = strtok(NULL, " \n");
-		i++;
+		if (*ptr == c)
+			return (ptr);
 	}
-	array[i] = NULL;
-	return (array);
+	return (NULL);
 }
 
 /**
  * _strdup - Duplicates a string
- * @s: String to duplicate
- * Return: Pointer to the duplicated string
+ * @str: The strign to be duplicated
+ * Return: A pointer to the duplicated string
  */
-char *_strdup(const char *s)
+char *_strdup(char *str)
 {
-	size_t len;
-	char *str_dup;
+	char *dup;
 
-	if (s == NULL)
-	{
+	if (str == NULL)
 		return (NULL);
-	}
-	len = _strlen(s) + 1;
-	str_dup = malloc(len);
-	if (str_dup != NULL)
-	{
-		_strcpy(str_dup, s);
-	}
-	return (str_dup);
-}
-
-/**
- * _strcpy - Copies content of one string to another
- * @dest: string to copy content
- * @src: string to copy from
- * Return: The copied string
- */
-char *_strcpy(char *dest, const char *src)
-{
-	char *org_dest = dest;
-
-	while ((*dest++ = *src++))
-	{
-		;
-	}
-	return (org_dest);
-}
-
-/**
- * _strncmp - Compares two string
- * @fir_str: First string
- * @sec_str: second string
- * @n: number of bytes to compare the string
- * Return: 0 if string is found, otherwise -1
- */
-int _strncmp(const char *fir_str, const char *sec_str, size_t n)
-{
-	size_t i;
-
-	for (i = 0; i < n; i++)
-	{
-		if (fir_str[i] != sec_str[i])
-		{
-			return ((unsigned char) fir_str[i] - (unsigned char)
-						sec_str[i]);
-		}
-		if (fir_str[i] == '\0')
-		{
-			break;
-		}
-	}
-	return (0);
+	dup = malloc(_strlen(str) + 1);
+	if (dup == NULL)
+		return (NULL);
+	_strcpy(dup, str);
+	return (dup);
 }
